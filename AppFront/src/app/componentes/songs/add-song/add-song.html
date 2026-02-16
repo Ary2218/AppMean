@@ -1,0 +1,138 @@
+<p>add-song works!</p>
+<div class="add-song-container">
+  <div class="form-card">
+
+    <h1 class="form-title">➕ Agregar Nueva Canción</h1>
+
+    <form (ngSubmit)="onSubmit()" #songForm="ngForm">
+
+      <!-- Título -->
+      <div class="form-group">
+        <label for="title">🎵 Título *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="newSong.title"
+          required
+          placeholder="Ej: Bohemian Rhapsody">
+      </div>
+
+      <!-- Artista -->
+      <div class="form-group">
+        <label for="artist">👤 Artista *</label>
+        <input
+          type="text"
+          id="artist"
+          name="artist"
+          [(ngModel)]="newSong.artist"
+          required
+          placeholder="Ej: Queen">
+      </div>
+
+      <!-- Género -->
+      <div class="form-group">
+        <label for="genre">🎸 Género *</label>
+        <input
+          type="text"
+          id="genre"
+          name="genre"
+          [(ngModel)]="newSong.genre"
+          required
+          placeholder="Ej: Rock">
+      </div>
+
+      <!-- Álbum -->
+      <div class="form-group">
+        <label for="album">💿 Álbum *</label>
+        <input
+          type="text"
+          id="album"
+          name="album"
+          [(ngModel)]="newSong.album"
+          required
+          placeholder="Ej: A Night at the Opera">
+      </div>
+
+      <!-- Duración -->
+      <div class="form-group">
+        <label for="duration">⏱️ Duración (segundos) *</label>
+        <input
+          type="number"
+          id="duration"
+          name="duration"
+          [(ngModel)]="newSong.duration"
+          required
+          min="1"
+          placeholder="Ej: 354">
+      </div>
+
+      <!-- Año -->
+      <div class="form-group">
+        <label for="year">📅 Año *</label>
+        <input
+          type="number"
+          id="year"
+          name="year"
+          [(ngModel)]="newSong.year"
+          required
+          min="1900"
+          max="2030"
+          placeholder="Ej: 1975">
+      </div>
+
+      <!-- Número de Pista -->
+      <div class="form-group">
+        <label for="trackNumber">🔢 Número de Pista *</label>
+        <input
+          type="number"
+          id="trackNumber"
+          name="trackNumber"
+          [(ngModel)]="newSong.trackNumber"
+          required
+          min="1"
+          placeholder="Ej: 11">
+      </div>
+
+      <!-- Contenido Explícito -->
+      <div class="form-group checkbox-group">
+        <label>
+          <input
+            type="checkbox"
+            name="isExplicit"
+            [(ngModel)]="newSong.isExplicit">
+          🅴 Contenido Explícito
+        </label>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-buttons">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="!songForm.form.valid || isSubmitting">
+          {{ isSubmitting ? '⏳ Guardando...' : '✅ Guardar Canción' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-cancel"
+          routerLink="/songs">
+          ❌ Cancelar
+        </button>
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div class="success-message" *ngIf="showSuccess">
+        ✅ ¡Canción agregada exitosamente!
+      </div>
+
+      <!-- Mensaje de error -->
+      <div class="error-message" *ngIf="errorMessage">
+        ❌ Error: {{ errorMessage }}
+      </div>
+
+    </form>
+
+  </div>
+</div>

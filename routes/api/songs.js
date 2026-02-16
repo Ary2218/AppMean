@@ -20,4 +20,15 @@ router.get('/:songId', async (req, res) =>{
 
 });
 
+router.post('/', async (req, res) => {
+    try {
+        const newSong = new Song(req.body);
+        const savedSong = await newSong.save();
+        res.status(201).json(savedSong);
+    } catch(error) {
+        res.status(400).json({error: error.message});
+    }
+});
+
+
 module.exports = router;
