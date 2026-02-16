@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class SongsService {
-  
+
   httpClient = inject(HttpClient);
   baseUrl = 'http://127.0.0.1:3000/api/songs';
 
@@ -15,11 +15,18 @@ export class SongsService {
       this.httpClient.get<any[]>(this.baseUrl)
     );
   }
- 
+
   getById(songId: string){
     return firstValueFrom(
       this.httpClient.get<any>(`${this.baseUrl}/${songId}`)
     );
-  }   
+  }
+
+  // ⭐ NUEVO: Método para crear canciones
+  create(song: any){
+    return firstValueFrom(
+      this.httpClient.post<any>(this.baseUrl, song)
+    );
+  }
 
 }

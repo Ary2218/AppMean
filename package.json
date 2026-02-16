@@ -16,5 +16,13 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mongoose": "^9.2.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xDaSerr/AppMean.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xDaSerr/AppMean/issues"
+  },
+  "homepage": "https://github.com/xDaSerr/AppMean#readme"
 }
