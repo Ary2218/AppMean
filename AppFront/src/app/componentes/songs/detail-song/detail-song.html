@@ -1,4 +1,234 @@
-<h1>{{song().title}}</h1>
-<h2>{{song().artist}}</h2>
-<h2>{{song().genre}}</h2>
-<h2>{{song().album}}</h2>
+<div class="detail-container">
+  <div class="detail-card" *ngIf="!isEditing">
+
+    <!-- Header -->
+    <div class="detail-header">
+      <button class="back-btn" routerLink="/songs">← Volver</button>
+      <span class="explicit-badge" *ngIf="song().isExplicit">🅴 Contenido Explícito</span>
+    </div>
+
+    <!-- Album Art Placeholder -->
+    <div class="album-art">
+      <div class="music-icon">🎵</div>
+    </div>
+
+    <!-- Song Title & Artist -->
+    <div class="title-section">
+      <h1 class="song-title">{{ song().title || 'Cargando...' }}</h1>
+      <h2 class="song-artist">{{ song().artist }}</h2>
+    </div>
+
+    <!-- Song Details Grid -->
+    <div class="details-grid">
+
+      <div class="detail-item">
+        <div class="detail-icon">💿</div>
+        <div class="detail-content">
+          <span class="detail-label">Álbum</span>
+          <span class="detail-value">{{ song().album }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-icon">🎸</div>
+        <div class="detail-content">
+          <span class="detail-label">Género</span>
+          <span class="detail-value">{{ song().genre }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-icon">📅</div>
+        <div class="detail-content">
+          <span class="detail-label">Año</span>
+          <span class="detail-value">{{ song().year }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-icon">🔢</div>
+        <div class="detail-content">
+          <span class="detail-label">Número de Pista</span>
+          <span class="detail-value">{{ song().trackNumber }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-icon">⏱️</div>
+        <div class="detail-content">
+          <span class="detail-label">Duración</span>
+          <span class="detail-value">{{ formatDuration(song().duration) }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-icon">🔊</div>
+        <div class="detail-content">
+          <span class="detail-label">Contenido</span>
+          <span class="detail-value">{{ song().isExplicit ? 'Explícito' : 'Apto para todo público' }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="edit-btn" (click)="enableEditMode()">
+        ✏️ Modificar
+      </button>
+      <button class="delete-btn" (click)="confirmDelete()">
+        🗑️ Eliminar
+      </button>
+    </div>
+
+  </div>
+
+  <!-- FORMULARIO DE EDICIÓN -->
+  <div class="detail-card" *ngIf="isEditing">
+
+    <h1 class="form-title">✏️ Modificar Canción</h1>
+
+    <form (ngSubmit)="onUpdate()" #editForm="ngForm">
+
+      <!-- Título -->
+      <div class="form-group">
+        <label for="title">🎵 Título *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="editSong.title"
+          required>
+      </div>
+
+      <!-- Artista -->
+      <div class="form-group">
+        <label for="artist">👤 Artista *</label>
+        <input
+          type="text"
+          id="artist"
+          name="artist"
+          [(ngModel)]="editSong.artist"
+          required>
+      </div>
+
+      <!-- Género -->
+      <div class="form-group">
+        <label for="genre">🎸 Género *</label>
+        <input
+          type="text"
+          id="genre"
+          name="genre"
+          [(ngModel)]="editSong.genre"
+          required>
+      </div>
+
+      <!-- Álbum -->
+      <div class="form-group">
+        <label for="album">💿 Álbum *</label>
+        <input
+          type="text"
+          id="album"
+          name="album"
+          [(ngModel)]="editSong.album"
+          required>
+      </div>
+
+      <!-- Duración -->
+      <div class="form-group">
+        <label for="duration">⏱️ Duración (segundos) *</label>
+        <input
+          type="number"
+          id="duration"
+          name="duration"
+          [(ngModel)]="editSong.duration"
+          required
+          min="1">
+      </div>
+
+      <!-- Año -->
+      <div class="form-group">
+        <label for="year">📅 Año *</label>
+        <input
+          type="number"
+          id="year"
+          name="year"
+          [(ngModel)]="editSong.year"
+          required
+          min="1900"
+          max="2030">
+      </div>
+
+      <!-- Número de Pista -->
+      <div class="form-group">
+        <label for="trackNumber">🔢 Número de Pista *</label>
+        <input
+          type="number"
+          id="trackNumber"
+          name="trackNumber"
+          [(ngModel)]="editSong.trackNumber"
+          required
+          min="1">
+      </div>
+
+      <!-- Contenido Explícito -->
+      <div class="form-group checkbox-group">
+        <label>
+          <input
+            type="checkbox"
+            name="isExplicit"
+            [(ngModel)]="editSong.isExplicit">
+          🅴 Contenido Explícito
+        </label>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-buttons">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="!editForm.form.valid || isSubmitting">
+          {{ isSubmitting ? '⏳ Guardando...' : '✅ Guardar Cambios' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="cancelEdit()">
+          ❌ Cancelar
+        </button>
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div class="success-message" *ngIf="showSuccess">
+        ✅ ¡Canción actualizada exitosamente!
+      </div>
+
+      <!-- Mensaje de error -->
+      <div class="error-message" *ngIf="errorMessage">
+        ❌ Error: {{ errorMessage }}
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="showDeleteModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>⚠️ Confirmar Eliminación</h2>
+    <p>¿Estás seguro de que deseas eliminar esta canción?</p>
+    <p class="song-name">"{{ song().title }}" - {{ song().artist }}</p>
+    <p class="warning-text">Esta acción no se puede deshacer.</p>
+
+    <div class="modal-buttons">
+      <button class="btn-confirm-delete" (click)="deleteSong()">
+        🗑️ Sí, Eliminar
+      </button>
+      <button class="btn-cancel-modal" (click)="showDeleteModal = false">
+        ❌ Cancelar
+      </button>
+    </div>
+  </div>
+</div>

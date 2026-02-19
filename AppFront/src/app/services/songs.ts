@@ -29,4 +29,18 @@ export class SongsService {
     );
   }
 
+   // ⭐ NUEVO: Eliminar canción
+  delete(songId: string){
+    return firstValueFrom(
+      this.httpClient.delete<any>(`${this.baseUrl}/${songId}`)
+    );
+  }
+
+  // ⭐ NUEVO: Actualizar canción
+  update(songId: string, song: any){
+    return firstValueFrom(
+      this.httpClient.put<any>(`${this.baseUrl}/${songId}`, song)
+    );
+  }
+
 }
