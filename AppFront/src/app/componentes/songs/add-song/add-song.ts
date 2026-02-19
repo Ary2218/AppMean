@@ -16,7 +16,6 @@ export class AddSong {
   router = inject(Router);
   songsService = inject(SongsService);
 
-  // Objeto para la nueva canción
   newSong = {
     title: '',
     artist: '',
@@ -40,13 +39,10 @@ export class AddSong {
     try {
       await this.songsService.create(this.newSong);
 
-      // Mostrar mensaje de éxito
       this.showSuccess = true;
 
-      // Resetear formulario
       this.resetForm();
 
-      // Redirigir a la lista después de 2 segundos
       setTimeout(() => {
         this.router.navigate(['/songs']);
       }, 2000);

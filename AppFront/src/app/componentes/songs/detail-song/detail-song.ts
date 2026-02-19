@@ -19,11 +19,11 @@ export class DetailSong {
   song = signal<any>({});
   songId: string = '';
 
-  // Variables para edición
+
   isEditing = false;
   editSong: any = {};
 
-  // Variables para estado
+
   isSubmitting = false;
   showSuccess = false;
   errorMessage = '';
@@ -44,21 +44,18 @@ export class DetailSong {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 
-  // Habilitar modo edición
   enableEditMode() {
     this.isEditing = true;
-    // Copiar los datos actuales al objeto de edición
+
     this.editSong = { ...this.song() };
   }
 
-  // Cancelar edición
   cancelEdit() {
     this.isEditing = false;
     this.errorMessage = '';
     this.showSuccess = false;
   }
 
-  // Actualizar canción - VERSIÓN SIMPLIFICADA
   onUpdate() {
   this.isSubmitting = true;
   this.errorMessage = '';
@@ -66,13 +63,9 @@ export class DetailSong {
 
   this.songsService.update(this.songId, this.editSong)
     .then(updatedSong => {
-      // Actualizar la vista
       this.song.set(updatedSong);
-
-      // Mostrar éxito
       this.showSuccess = true;
 
-      // Esperar 1 segundo y recargar
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -84,16 +77,14 @@ export class DetailSong {
     });
 }
 
-  // Mostrar modal de confirmación
   confirmDelete() {
     this.showDeleteModal = true;
   }
 
-  // Eliminar canción
   deleteSong() {
     this.songsService.delete(this.songId)
       .then(() => {
-        // Redirigir a la lista
+
         this.router.navigate(['/songs']);
       })
       .catch((error: any) => {
